@@ -27,13 +27,13 @@ driver.find_element(by=By.XPATH, value="//input[@id='userPassword'][@class='form
 driver.find_element(by=By.XPATH, value="//input[@id='userPassword'][@class='form-control userPassword']").send_keys(pasword)
 # login qib kirish knopkasini boish
 driver.find_element(by=By.XPATH, value="//button[@id='login_btn'][@class='btn btn-theme-primary btn-loader']").click()
-sleep(20)
+sleep(10)
 try:
     # waiting
     WebDriverWait(driver, 10)
     # Get started oynasini olib tashlash uchun start knopkasini bosish
     driver.find_element(by=By.XPATH, value="//button[@type='button'][@class='btn btn-default btn-close']").click()
-    sleep(4)
+    #sleep(4)
 except:
     pass
 try:
@@ -41,14 +41,20 @@ try:
     WebDriverWait(driver, 10)
     # Verifikatsiya oynasini olib tashlash uchun close knopkasini bosish
     driver.find_element(by=By.XPATH, value="//button[@type='button'][@class='btn btn-theme-secondary']").click()
-    sleep(4)
+    sleep(2)
 except:
     pass
-# parolni ochish uchun ko'z knopkasini bosish
-driver.find_element(by=By.CLASS_NAME, value="input-group-addon ma-toggle-password").click()
+# waiting
+WebDriverWait(driver, 10)
+driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#WebDriverWait.execute_script("window.scrollBy(0,40)")
+WebDriverWait(driver, 10)
 # change knopkasini bosish
+a = driver.find_element(by=By.XPATH, value="//button[@type='button'][@data-trade_platform_id='710004333'][@data-account_id='29890']").click()
+# eski parolni kiritish uchun bosish
+#driver.find_element(by=By.XPATH, value="//input[@id='password'][@class='form-control']").send_keys("Asdfg_123456")
 
-
+print(a)
 
 # waiting
 WebDriverWait(driver, 10)
