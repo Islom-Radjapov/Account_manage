@@ -27,21 +27,28 @@ driver.find_element(by=By.XPATH, value="//input[@id='userPassword'][@class='form
 driver.find_element(by=By.XPATH, value="//input[@id='userPassword'][@class='form-control userPassword']").send_keys(pasword)
 # login qib kirish knopkasini boish
 driver.find_element(by=By.XPATH, value="//button[@id='login_btn'][@class='btn btn-theme-primary btn-loader']").click()
-
+sleep(20)
 try:
     # waiting
     WebDriverWait(driver, 10)
     # Get started oynasini olib tashlash uchun start knopkasini bosish
     driver.find_element(by=By.XPATH, value="//button[@type='button'][@class='btn btn-default btn-close']").click()
+    sleep(4)
 except:
     pass
 try:
     # waiting
     WebDriverWait(driver, 10)
-    # Get started oynasini olib tashlash uchun start knopkasini bosish
+    # Verifikatsiya oynasini olib tashlash uchun close knopkasini bosish
     driver.find_element(by=By.XPATH, value="//button[@type='button'][@class='btn btn-theme-secondary']").click()
+    sleep(4)
 except:
     pass
+# parolni ochish uchun ko'z knopkasini bosish
+driver.find_element(by=By.CLASS_NAME, value="input-group-addon ma-toggle-password").click()
+# change knopkasini bosish
+
+
 
 # waiting
 WebDriverWait(driver, 10)
