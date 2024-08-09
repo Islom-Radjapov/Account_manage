@@ -1,14 +1,15 @@
 # Close_account
 
 
-Ochilmidi
+No working
 Forex.com
 
 
 
 
 
-Free demo open
-Taurex
+"\n"Free demo open
+Taurex 
 https://my.forextime.com/
-IC market
+IC market (accountni ochrib bomidi)
+Pepperstone (odiy broker spreed 0, commision 7)
