@@ -3,7 +3,7 @@
 
 No working
 Forex.com
-
+TradeTrust (ochiladi lekn deposit tanlanmidi)
 
 
 
@@ -13,3 +13,8 @@ Taurex
 https://my.forextime.com/
 IC market (accountni ochrib bomidi)
 Pepperstone (odiy broker spreed 0, commision 7)
+
+
+
+Taurex brokeri tekshir HFT ishlidimi
+
