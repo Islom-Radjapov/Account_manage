@@ -65,46 +65,24 @@ void OnTick() {
       for (int x = 0; x < ArraySize(chat_id); x++) {
          SendMessage(chat_id[x], "Daily loss done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
       }
-      Daily_loss();
+      Write_loss();
    }
    else if (AccountInfoDouble(ACCOUNT_EQUITY) < max_loss) {
       Print("Max Drawdown done");
       for (int x = 0; x < ArraySize(chat_id); x++) {
          SendMessage(chat_id[x], "Max Drawdown done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
       }
-      Max_Drawdown();
+      Write_loss();
    }
 
 }
 
 
-void Daily_loss() {
+void Write_loss() {
    while (true) {
       int handle = FileOpen("loss.csv", FILE_WRITE|FILE_CSV);
       if(handle != INVALID_HANDLE) {
-         bool result = FileWrite(handle, "daily_loss");
-         if (result) {
-            Print("File write successfull!");
-            FileClose(handle);
-            ExpertRemove();
-            break;
-         } else {
-            Print("File write failed!");
-         }
-      } else {
-         Print("Failed to open file!");
-      }
-      FileClose(handle);
-      Sleep(5000);
-   }
-}
-
-
-void Max_Drawdown() {
-   while (true) {
-      int handle = FileOpen("loss.csv", FILE_WRITE|FILE_CSV);
-      if(handle != INVALID_HANDLE) {
-         bool result = FileWrite(handle, "max_loss");
+         bool result = FileWrite(handle, 1111);
          if (result) {
             Print("File write successfull!");
             FileClose(handle);
