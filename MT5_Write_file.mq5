@@ -1,23 +1,3 @@
-#include <Trade/Trade.mqh>
-CTrade  trade;
-
-// ----------------------------------------------------  TELEGRAM -----------------------------------------------------------------------
-double chat_id[3] = {5294408795, 561789930};
-const string Token = "7382465275:AAHMwFNC8mQWrYX0Bgkm8b9krQ3NLis-xPA";
-const string URL = "https://api.telegram.org";
-
-bool SendMessage(double id, string text) {
-   
-   char postData[];
-   char resultData[];
-   string resultHeaders;
-   int response;
-   
-   string requestUrl = URL + "/bot" + Token + "/sendMessage?chat_id=" + id + "&text=" + text;
-   response = WebRequest("POST", requestUrl, NULL, 1000, postData, resultData, resultHeaders);
-   return (response == 200);
-}
-
 
 datetime lastRunTime;
 double daily_loss, max_loss;
@@ -42,6 +22,7 @@ void OnDeinit(const int reason) {
 
 
 void OnTimer() {
+
    MqlDateTime time1, time2;
    //datetime currentTime = TimeCurrent();
    TimeToStruct(TimeCurrent(), time1);
@@ -49,11 +30,12 @@ void OnTimer() {
 
    // Check if the current time is after midnight and it hasn't run today
    if (time1.hour == 3 && time1.min == 0 && time1.day != time2.day) {
-      
+      Print("Daily loss old  ", daily_loss);
       lastRunTime = TimeCurrent();  // Update last run time
       daily_loss = NormalizeDouble(AccountInfoDouble(ACCOUNT_EQUITY) - (AccountInfoDouble(ACCOUNT_EQUITY) * 0.01 * 5), 2);
-      Print(">>>>>>>>>>>>>>>>> 00:00  daily loss  ", daily_loss);  // Call the function that should only run at 00:00
+      Print("Daily loss new ", daily_loss);  // Call the function that should only run at 00:00
    }
+   
 }
 
 
@@ -61,22 +43,16 @@ void OnTimer() {
 void OnTick() {
    
    Comment("Working . . .", "\nDaily loss  ", daily_loss, "\nMax Drawdown  ", max_loss);
-   if (PositionsTotal() == 0) {
-      trade.Sell(1, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_BID));
+   if (PositionsTotal() ==0) {
+      //trade.sell
    }
-   
+
    if (AccountInfoDouble(ACCOUNT_EQUITY) < daily_loss) {
       Print("Daily loss done");
-      for (int x = 0; x < ArraySize(chat_id); x++) {
-         SendMessage(chat_id[x], "Daily loss done \nName  " + AccountInfoString(ACCOUNT_NAME) + "\nLogin  " + AccountInfoInteger(ACCOUNT_LOGIN));
-      }
       Daily_loss();
    }
    else if (AccountInfoDouble(ACCOUNT_EQUITY) < max_loss) {
       Print("Max Drawdown done");
-      for (int x = 0; x < ArraySize(chat_id); x++) {
-         SendMessage(chat_id[x], "Max Drawdown done \nName  " + AccountInfoString(ACCOUNT_NAME) + "\nLogin  " + AccountInfoInteger(ACCOUNT_LOGIN));
-      }
       Max_Drawdown();
    }
 
@@ -87,7 +63,7 @@ void Daily_loss() {
    while (true) {
       int handle = FileOpen("loss.csv", FILE_WRITE|FILE_CSV);
       if(handle != INVALID_HANDLE) {
-         bool result = FileWrite(handle, 111);
+         bool result = FileWrite(handle, "daily_loss");
          if (result) {
             Print("File write successful!");
             FileClose(handle);
@@ -109,7 +85,7 @@ void Max_Drawdown() {
    while (true) {
       int handle = FileOpen("loss.csv", FILE_WRITE|FILE_CSV);
       if(handle != INVALID_HANDLE) {
-         bool result = FileWrite(handle, 222);
+         bool result = FileWrite(handle, "max_loss");
          if (result) {
             Print("File write successful!");
             FileClose(handle);
@@ -125,4 +101,3 @@ void Max_Drawdown() {
       Sleep(5000);
    }
 }
-
