@@ -1,5 +1,5 @@
 <h1 align="center">MT4 open challange account</h1>
-<h3 align="left">1</h3>
+<h3>1</h3>
   - 1 Open Taurex demo
   - 2
   3
