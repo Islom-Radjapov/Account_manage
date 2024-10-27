@@ -2,15 +2,13 @@
 <h3>1 open Taurex account</h3>
   1.Get mail free <a href="https://temp-mail.org" target="_blank" rel="noopener">button</a><br>
   2.Register Taurex account and open MT4 <a href="https://global.mytaurex.com/live_signup?brd=2">button</a>
-  3
-<h3 align="left">2</h3>
-  1
-  2
-<h3 align="left">3</h3>
-<h3 align="left">4</h3>
+<h3 align="left">2 Setting VPS</h3>
+  1.Buy new VPS for client in Zomro <a href="https://zomro.com">button</a><br>
+  2.Download MT4 and install it on VPS <a href="https://download.metatrader.com/cdn/web/exness.technologies.ltd/mt4/exness4setup.exe">Dowload MT4</a>
+<h3 align="left">3 MT4 install close account scripts</h3>
+<h3 align="left">4 VPS install python scripts</h3>
   1
   2
 <h3 align="left">5</h3>
   1
 <h3 align="left">6</h3>
-<p>Check out <a href="https://www.freecodecamp.org/" target="_blank" rel="noopener noreferrer">freeCodeCamp</a>.</p>
