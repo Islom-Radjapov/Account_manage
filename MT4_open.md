@@ -7,10 +7,10 @@
   1.Buy new VPS for client in Zomro <a href="https://zomro.com">button</a><br>
   2.Download MT4 and install it on VPS <a href="https://download.metatrader.com/cdn/web/exness.technologies.ltd/mt4/exness4setup.exe">Dowload MT4</a>
 <h3 align="left">3 Install Close_acc script on MT4</h3>
-  1.Get MT4 Script <a href="https://github.com/Islom-Radjapov/Close_account/blob/main/MT4_Send_and_Write.mq4">MT4_Send_and_Write</a>
-  2.Allow WebRequest in MT4  https://api.telegram.org
-<h3 align="left">4 VPS install python scripts</h3>
-  1
+  1.Get MT4 Script <a href="https://github.com/Islom-Radjapov/Close_account/blob/main/MT4_Send_and_Write.mq4">MT4_Send_and_Write</a><br>
+  2.Allow WebRequest in MT4   https://api.telegram.org
+<h3 align="left">4 Install python scripts on VPS</h3>
+  1.
   2
 <h3 align="left">5</h3>
   1
