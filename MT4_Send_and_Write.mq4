@@ -18,13 +18,14 @@ bool SendMessage(double id, string text) {
 
 
 datetime lastRunTime;
-double daily_loss, max_loss;
+double daily_loss, max_loss, target;
 int x;
 
 int OnInit() {
 
    daily_loss = NormalizeDouble(AccountEquity() - (AccountEquity() * 0.01 * 5), 2);
    max_loss = NormalizeDouble(AccountEquity() - (AccountEquity() * 0.01 * 12), 2);
+   target = NormalizeDouble(AccountBalance() + (AccountBalance() * 0.01 * 8), 2);
 
    return (INIT_SUCCEEDED);
 }
@@ -53,7 +54,7 @@ void OnTimer() {
 
 
 void OnTick() {
-   Comment("Working . . .", "\nDaily loss  ", daily_loss, "\nMax Drawdown  ", max_loss);
+   Comment("Working . . .", "\nDaily loss  ", daily_loss, "\nMax Drawdown  ", max_loss, "\nTarget  ", target);
 
    if (AccountEquity() < daily_loss) {
       Print("Daily loss done");
@@ -68,6 +69,16 @@ void OnTick() {
          SendMessage(chat_id[x], "Max Drawdown done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
       }
       Write_loss();
+   }
+   else if (AccountBalance() > target && OrdersTotal() == 0) {
+      if (OrderSelect(OrdersHistoryTotal() -1 , SELECT_BY_POS, MODE_HISTORY) ) {
+         if (OrderCloseTime() + 60 * 10 < TimeCurrent()) {
+            for (x = 0; x < ArraySize(chat_id); x++) {
+               SendMessage(chat_id[x], "Target done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
+            }
+            Write_loss();
+         }
+      }
    }
 
 }
