@@ -59,14 +59,14 @@ void OnTick() {
    if (AccountEquity() < daily_loss) {
       Print("Daily loss done");
       for (x = 0; x < ArraySize(chat_id); x++) {
-         SendMessage(chat_id[x], "Daily loss done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
+         SendMessage(chat_id[x], "Daily loss done   Time - " + TimeCurrent() + "   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
       }
       Write_loss();
    }
    else if (AccountEquity() < max_loss) {
       Print("Max Drawdown done");
       for (x = 0; x < ArraySize(chat_id); x++) {
-         SendMessage(chat_id[x], "Max Drawdown done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
+         SendMessage(chat_id[x], "Max Drawdown done   Time - " + TimeCurrent() + "   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
       }
       Write_loss();
    }
@@ -74,7 +74,7 @@ void OnTick() {
       if (OrderSelect(OrdersHistoryTotal() -1 , SELECT_BY_POS, MODE_HISTORY) ) {
          if (OrderCloseTime() + 60 * 10 < TimeCurrent()) {
             for (x = 0; x < ArraySize(chat_id); x++) {
-               SendMessage(chat_id[x], "Target done   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
+               SendMessage(chat_id[x], "Target done   Time - " + TimeCurrent() + "   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
             }
             Write_loss();
          }
