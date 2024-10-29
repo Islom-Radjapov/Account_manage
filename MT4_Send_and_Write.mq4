@@ -73,6 +73,7 @@ void OnTick() {
    else if (AccountBalance() > target && OrdersTotal() == 0) {
       if (OrderSelect(OrdersHistoryTotal() -1 , SELECT_BY_POS, MODE_HISTORY) ) {
          if (OrderCloseTime() + 60 * 10 < TimeCurrent()) {
+            Print("Target done");
             for (x = 0; x < ArraySize(chat_id); x++) {
                SendMessage(chat_id[x], "Target done   Time - " + TimeCurrent() + "   Name - " + AccountInfoString(ACCOUNT_NAME) + "   Login - " + AccountInfoInteger(ACCOUNT_LOGIN));
             }
