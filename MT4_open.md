@@ -12,7 +12,7 @@
 <h3 align="left">4 Install python scripts on VPS</h3>
   1.Get python Script  <a href="https://github.com/Islom-Radjapov/Close_account/blob/main/mt4.py">mt4.py</a>
 <h3 align="left">5 Modify the Python script </h3>
-  1.Modify Mail
-  2.Modify Mail password
-  3.Modify MT4 pasword
+  1.Modify Mail<br>
+  2.Modify Mail password<br>
+  3.Modify MT4 pasword<br>
   4.Modify file directory
