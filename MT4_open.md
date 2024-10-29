@@ -10,8 +10,9 @@
   1.Get MT4 Script <a href="https://github.com/Islom-Radjapov/Close_account/blob/main/MT4_Send_and_Write.mq4">MT4_Send_and_Write</a><br>
   2.Allow WebRequest in MT4   https://api.telegram.org
 <h3 align="left">4 Install python scripts on VPS</h3>
-  1.
-  2
-<h3 align="left">5</h3>
-  1
-<h3 align="left">6</h3>
+  1.Get python Script  <a href="https://github.com/Islom-Radjapov/Close_account/blob/main/mt4.py">mt4.py</a>
+<h3 align="left">5 Modify the Python script </h3>
+  1.Modify Mail
+  2.Modify Mail password
+  3.Modify MT4 pasword
+  4.Modify file directory
