@@ -60,7 +60,6 @@ def get_access_token(client_id, client_secret, tenant_id):
     token_response = app.acquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
 
     if "access_token" in token_response:
-        print("access_token => ", token_response["access_token"])
         return token_response["access_token"]
     else:
         raise Exception(f"Failed to acquire token: {token_response.get('error_description')}")
@@ -148,6 +147,7 @@ if initialize:
         if new.day != old.day and new.hour == 0 and new.minute:
             old = datetime.datetime.utcnow()
             daily = mt5.account_info().equity - (mt5.account_info().equity * 0.01 * 5)
+            print("New Daily loss=> ", daily)
 
         if mt5.account_info().equity < daily:
             message = f"Done Daily loss!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
