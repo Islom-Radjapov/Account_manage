@@ -1,3 +1,9 @@
+import subprocess
+import sys
+subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy==1.26.4"])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "MetaTrader5"])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "msal"])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
 import MetaTrader5 as mt5
 import time
 import datetime
