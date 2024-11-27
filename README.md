@@ -1,5 +1,5 @@
 # Close_account
-
+python MT5.py && shutdown /l
 
 No working
 Forex.com
