@@ -7,17 +7,20 @@ subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
 import MetaTrader5 as mt5
 import time
 import datetime
+from datetime import timedelta
 from msal import ConfidentialClientApplication
 import requests
 
-login = 114119
-password = 'JkHaO*7c'
+login = 570898
+password = '_dPj4rWt'
 server = 'BlueWhaleMarkets-Server'
-TO_EMAIL = "james.smith.24@mail.ru"
+TO_EMAIL = "bumidjon263@gmail.com"
 
 daily_loss_subject = "Account Violation - Max Daily Drawdown"
 max_loss_subject = "Account Violation - Max Drawdown"
-def HTML(login, los=""):
+weekly_subject = "Account Violation - Weekly closing orders"
+
+def HTML(login, los):
     return f"""
 <!DOCTYPE html>
 <head>
@@ -31,7 +34,7 @@ def HTML(login, los=""):
             We understand that trading is a complex and ever-changing market, and setbacks are common. Please don't feel discouraged. <br/>
             We encourage you to continue learning and growing as a trader. <br/>
             Account number: {login} <br/>
-            Violation: Max {los} Drawdown <br/>
+            Violation: {los} <br/>
             We encourage you to work on your strategy and once you feel comfortable please come back and try us out again! <br/>
 
         </h3>
@@ -144,9 +147,10 @@ if initialize:
 
     daily = mt5.account_info().balance - (mt5.account_info().balance * 0.01 * 5)
     max = mt5.account_info().balance - (mt5.account_info().balance * 0.01 * 12)
+    old = datetime.datetime.utcnow()
+    last_run_time = None
     print("Daily loss=> ", daily)
     print("Max loss=> ", max)
-    old = datetime.datetime.utcnow()
 
     while True:
         new = datetime.datetime.utcnow()
@@ -158,15 +162,23 @@ if initialize:
         if mt5.account_info().equity < daily:
             message = f"Done Daily loss!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+            Send(daily_loss_subject, HTML(login, "Max Daily Drawdown"))
             print(requests.get(url).json())
-            Send(daily_loss_subject, HTML(login, "Daily"))
             break
         elif mt5.account_info().equity < max:
             message = f"Done Max loss!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+            Send(max_loss_subject, HTML(login, "Max Drawdown"))
             print(requests.get(url).json())
-            Send(max_loss_subject, HTML(login))
             break
+        if new.weekday() == 5 and new.hour == 0 and new.minute == 0:
+            if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
+                last_run_time = new
+                message = f"Done Weekly closing orders!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                Send(weekly_subject, HTML(login, "Weekly closing orders"))
+                print(requests.get(url).json())
+
 
         time.sleep(0.1)
 else:
