@@ -144,12 +144,12 @@ if initialize:
 
     while True:
         new = datetime.datetime.utcnow()
-        if new.day != old.day and new.hour == 0 and new.minute:
+        if new.day != old.day and new.hour == 0 and new.minute == 1:
             old = datetime.datetime.utcnow()
             daily = mt5.account_info().equity - (mt5.account_info().equity * 0.01 * 5)
             print("New Daily loss=> ", daily)
             message = f"New Daily loss=> {daily}\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
-            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+            url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
             print(requests.get(url).json())
 
 
@@ -165,7 +165,7 @@ if initialize:
             Send("Account Violation - Max Drawdown", HTML(login, "Max Drawdown"))
             print(requests.get(url).json())
             break
-        if new.weekday() == 6 and new.hour == 0 and new.minute == 0:
+        if new.weekday() == 6 and new.hour == 0 and new.minute == 1:
             if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
                 last_run_time = new
                 message = f"Done Weekly closing orders!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
