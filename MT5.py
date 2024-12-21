@@ -11,14 +11,10 @@ from datetime import timedelta
 from msal import ConfidentialClientApplication
 import requests
 
-login = 570898
-password = '_dPj4rWt'
+login = 572534
+password = "-cXiW7Rm"
 server = 'BlueWhaleMarkets-Server'
-TO_EMAIL = "bumidjon263@gmail.com"
-
-daily_loss_subject = "Account Violation - Max Daily Drawdown"
-max_loss_subject = "Account Violation - Max Drawdown"
-weekly_subject = "Account Violation - Weekly closing orders"
+TO_EMAIL = "islom.radjapov.1997@mail.ru"
 
 def HTML(login, los):
     return f"""
@@ -111,17 +107,11 @@ def send_email(access_token, sender_email, recipient_email, subject, html_conten
         print(f"Failed to send email: {response.status_code}, {response.text}")
         return False
 
-
-
-
-
 # Replace these with your Azure AD app details and email settings
 CLIENT_ID = "efa87325-5a82-48be-b463-3f50ba0ed6ec"
 CLIENT_SECRET = "2dg8Q~FnSeiC.dToAWXedvVEc2go5C60eWUMCdhK"
 TENANT_ID = "619ef93b-584c-4cb7-b9c9-1946e5da30d2"
 SENDER_EMAIL = "support@dreams-funded.com"
-
-
 
 def Send(subject, html):
     while True:
@@ -158,25 +148,29 @@ if initialize:
             old = datetime.datetime.utcnow()
             daily = mt5.account_info().equity - (mt5.account_info().equity * 0.01 * 5)
             print("New Daily loss=> ", daily)
+            message = f"New Daily loss=> {daily}\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+            print(requests.get(url).json())
+
 
         if mt5.account_info().equity < daily:
             message = f"Done Daily loss!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send(daily_loss_subject, HTML(login, "Max Daily Drawdown"))
+            Send("Account Violation - Max Daily Drawdown", HTML(login, "Max Daily Drawdown"))
             print(requests.get(url).json())
             break
         elif mt5.account_info().equity < max:
             message = f"Done Max loss!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send(max_loss_subject, HTML(login, "Max Drawdown"))
+            Send("Account Violation - Max Drawdown", HTML(login, "Max Drawdown"))
             print(requests.get(url).json())
             break
-        if new.weekday() == 5 and new.hour == 0 and new.minute == 0:
+        if new.weekday() == 6 and new.hour == 0 and new.minute == 0:
             if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
                 last_run_time = new
                 message = f"Done Weekly closing orders!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
                 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                Send(weekly_subject, HTML(login, "Weekly closing orders"))
+                Send("Account Violation - Weekly opening orders", HTML(login, "Weekly opening orders"))
                 print(requests.get(url).json())
 
 
