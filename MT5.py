@@ -11,10 +11,10 @@ from datetime import timedelta
 from msal import ConfidentialClientApplication
 import requests
 
-login = 572534
-password = "-cXiW7Rm"
+login = 566212
+password = "7!DjJyEq"
 server = 'BlueWhaleMarkets-Server'
-TO_EMAIL = "islom.radjapov.1997@mail.ru"
+TO_EMAIL = "sardorjon.nasimov@mail.ru"
 
 def HTML(login, los):
     return f"""
@@ -168,10 +168,15 @@ if initialize:
         if new.weekday() == 6 and new.hour == 0 and new.minute == 1:
             if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
                 last_run_time = new
-                message = f"Done Weekly closing orders!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
-                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                Send("Account Violation - Weekly opening orders", HTML(login, "Weekly opening orders"))
-                print(requests.get(url).json())
+                orders = 0
+                for sym in mt5.symbols_get():
+                    orders += len(mt5.positions_get(symbol=sym.name))
+                if orders > 0:
+                    message = f"Done Weekly opening orders!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+                    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                    Send("Account Violation - Weekly opening orders", HTML(login, "Weekly opening orders"))
+                    print(requests.get(url).json())
+                    break
 
 
         time.sleep(0.1)
