@@ -78,6 +78,16 @@ if initialize:
         print("Daily Drawdown ", )
         print("Max Loss ", )
         print("Your Funded Program Lasted For ", datetime.now() - get_first_trade() )
+        update_data = {
+            "current_balance": mt5.account_info().balance,
+            "total_profit_or_lose": get_profit_loss(),
+            "balance": mt5.account_info().balance,
+            "equity_balance": mt5.account_info().equity,
+            "daily_draw_down": -25.00,
+            "max_loss": -150.00,
+            "start_date_trade": datetime.now().strftime("%Y-%m-%d"),
+            "lasted_for": datetime.now().strftime("%Y-%m-%d"),
+        }
         break
 
 else:
