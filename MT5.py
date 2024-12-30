@@ -125,6 +125,12 @@ def Send(subject, html):
         if res:
             break
 
+def get_last_trade():
+    a = mt5.history_deals_get(datetime.datetime.now() - timedelta(days=365), datetime.datetime.now() + timedelta(days=1))
+    b = [x for x in a if x.profit != 0][-1]
+    d = mt5.history_deals_get(position=b.position_id)[1]
+    return datetime.datetime.fromtimestamp(d.time)
+
 initialize = mt5.initialize()
 
 mt5.login(login=login, password=password, server=server)
@@ -177,7 +183,13 @@ if initialize:
                     Send("Account Violation - Weekly opening orders", HTML(login, "Weekly opening orders"))
                     print(requests.get(url).json())
                     break
-
+        if mt5.positions_total() == 0:
+            if get_last_trade() + timedelta(days=30) < new:
+                message = f"Done 30 days of inactivity!\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                Send("Account Violation - 30 days of inactivity", HTML(login, "30 days of inactivity"))
+                print(requests.get(url).json())
+                break
 
         time.sleep(0.1)
 else:
