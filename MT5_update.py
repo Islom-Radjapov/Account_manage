@@ -1,13 +1,11 @@
-import subprocess
+"""import subprocess
 import sys
-
-from A import balance
-
 subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy==1.26.4"])
 subprocess.check_call([sys.executable, "-m", "pip", "install", "MetaTrader5"])
 subprocess.check_call([sys.executable, "-m", "pip", "install", "msal"])
 subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
-import MetaTrader5 as mt5
+"""
+import MetaTrader5 as MT5
 import time
 from datetime import datetime, timedelta
 from msal import ConfidentialClientApplication
@@ -18,8 +16,8 @@ password = "HzS-Dz2o"
 server = 'BlueWhaleMarkets-Server'
 TO_EMAIL = "islom.radjapov.1997@mail.ru"
 challenge_id = 2
-typee = 1# 0-challange 1-funded 3-daily send
-def HTML(login, los):
+
+def HTML(los):
     return f"""
 <!DOCTYPE html>
 <head>
@@ -129,267 +127,211 @@ def Send(subject, html):
             break
 
 
-def get_profit_loss(balancee):
-    result = 0
-    if mt5.account_info().equity > balancee:
-        result = mt5.account_info().equity - balancee
-    elif mt5.account_info().equity < balancee:
-        result = -(balancee - mt5.account_info().equity)
-    return result
-
-def get_equlity_profit_loss(balancee):
-    result = 0
-    if mt5.account_info().equity > balancee:
-        result = mt5.account_info().equity - balancee
-    elif mt5.account_info().equity < balancee:
-        result = -(balancee - mt5.account_info().equity)
-    return result
-
-def get_balance(balancee):
-    result = 0
-    if mt5.account_info().balance > balancee:
-        result = mt5.account_info().balance - balancee
-    elif mt5.account_info().balance < balancee:
-        result = -(balancee - mt5.account_info().balance)
-    return result
 
 def get_last_trade():
     try:
-        a = mt5.history_deals_get(datetime.now() - timedelta(days=365), datetime.now() + timedelta(days=1))
+        a = MT5.history_deals_get(datetime.now() - timedelta(days=365), datetime.now() + timedelta(days=1))
         b = [x for x in a if x.profit != 0][-1]
-        d = mt5.history_deals_get(position=b.position_id)[1]
+        d = MT5.history_deals_get(position=b.position_id)[1]
         return datetime.fromtimestamp(d.time)
     except:
         return datetime.utcnow()
-
-def get_first_trade():
-    a = mt5.history_deals_get(datetime.now() - timedelta(days=365), datetime.now() + timedelta(days=1))
-    b = [x for x in a if x.profit != 0][1]
-    d = mt5.history_deals_get(position=b.position_id)[0]
-    return datetime.fromtimestamp(d.time)
-
-def get_drowdown_max(loss):
+################################################################################################################
+def get_profit_loss(balancee):
     result = 0
-    if mt5.account_info().equity > loss:
-        result = mt5.account_info().equity - loss
-    return mt5.account_info().equity - loss
+    if MT5.account_info().equity > balancee:
+        result = MT5.account_info().equity - balancee
+    elif MT5.account_info().equity < balancee:
+        result = -(balancee - MT5.account_info().equity)
+    return result
+
+def get_drowdown_daily(daily_equity1, daily1):
+    result = 0
+    if MT5.account_info().equity < daily_equity1:
+        result = MT5.account_info().equity - daily1
+        if result < 0:
+            return
+    return result
+
+def get_drowdown_max(balancee):
+    result = 0
+    if MT5.account_info().equity < balancee:
+        result = balancee - MT5.account_info().equity
+        if result < 0:
+            return
+    return result
 
 def get_profit_target(balancee):
     result = 0
-    if mt5.account_info().equity > balancee:
-        result = mt5.account_info().equity - balancee
+    if MT5.account_info().equity > balancee:
+        result = MT5.account_info().equity - balancee
     return result
 
 def get_profit(balancee):
     result = 0
-    if mt5.account_info().balance > balancee:
-        result = mt5.account_info().balance - balancee
+    if MT5.account_info().balance > balancee:
+        result = MT5.account_info().balance - balancee
     return result
 
-def update(balanee, status, daily1, max1):
-    if typee == 0: # challange
-        update_data = {
-        "account_status": status,
-        "total_profit_or_lose": get_profit_loss(balanee),
-        "current_balance": mt5.account_info().balance,
-        "daily_draw_down_max": get_drowdown(daily1),
-        #"daily_draw_down_current": get_drowdown(daily1),
-        #"max_loss_max": max1,
-        "max_loss_current": get_drowdown(max1),
-        #"profit_target_max": profit,
-        "profit_target_current": get_profit_target(balanee),
-        #"profit": get_profit(balanc),
-        #"lasted_for": get_first_trade()
-        }
-    elif typee == 1: # funded
-        update_data = {
-            "account_status": status,
-            "total_profit_or_lose": get_profit_loss(balanee),
-            "current_balance": mt5.account_info().balance,
-            #"daily_draw_down_max": daily1,
-            "daily_draw_down_current": get_drowdown(daily1),
-            #"max_loss_max": max1,
-            "max_loss_current": get_drowdown(max1),
-            #"profit_target_max": profit,
-            #"profit_target_current": get_profit_target(balanee),
-            'profit': get_profit(balanee),
-            #"lasted_for": get_first_trade()
-        }
-    else:
-        update_data = {
-            #"account_status": status,
-            #"total_profit_or_lose": get_profit_loss(balanc),
-            #"current_balance": mt5.account_info().balance,
-            "daily_draw_down_max": daily,
-            "daily_draw_down_current": get_drowdown(daily),
-            "max_loss_max": max,
-            "max_loss_current": get_drowdown(max),
-            "profit_target_max": profit,
-            "profit_target_current": get_profit_target(balanc),
-            #'profit': get_profit(balanc),
-            "lasted_for": get_first_trade()
-        }
+def get_first_trade():
+    try:
+        a = MT5.history_deals_get(datetime.now() - timedelta(days=365), datetime.now() + timedelta(days=1))
+        b = [x for x in a if x.profit != 0][1]
+        d = MT5.history_deals_get(position=b.position_id)[0]
+        return datetime.fromtimestamp(d.time)
+    except:
+        return 0
 
-    requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                   headers={"Content-Type": "application/json"})
-
-initialize = mt5.initialize()
-
-mt5.login(login=login, password=password, server=server)
+initialize = MT5.initialize()
+MT5.login(login=login, password=password, server=server)
 
 if initialize:
     print('Connected to MetaTrader5')
-    print('Login=>', mt5.account_info().login)
-    balanc =  mt5.account_info().balance
+    print('Login=>', MT5.account_info().login)
+    balanc =  MT5.account_info().balance
     print('Balance=>', balanc)
-    print('Server=>', mt5.account_info().server)
+    print('Server=>', MT5.account_info().server)
 
-    daily = mt5.account_info().balance - (mt5.account_info().balance * 0.01 * 5)
-    max = mt5.account_info().balance - (mt5.account_info().balance * 0.01 * 12)
-    profit = mt5.account_info().balance * 0.01 * 8
+    daily = MT5.account_info().balance - (MT5.account_info().balance * 0.01 * 5)
+    max_loss = MT5.account_info().balance - (MT5.account_info().balance * 0.01 * 12)
+    daily_equity = MT5.account_info().equity
+    profit = MT5.account_info().balance * 0.01 * 8
     old = datetime.utcnow()
     last_run_time = None
     update_time = datetime.utcnow()
     print("Daily loss=> ", daily)
-    print("Max loss=> ", max)
+    print("Max loss=> ", max_loss)
 
     update_data = {
-        "account_status": "active",
+        "account_status": "active", # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++awesgrdthfygjukhijkl;lsdtfyghjk
         "total_profit_or_lose": get_profit_loss(balanc),
-        "current_balance": mt5.account_info().balance,
-        "daily_draw_down_max": balanc - daily,
-        "daily_draw_down_current": get_drowdown(daily),
-        "max_loss_max": balanc - max,
-        "max_loss_current": get_drowdown(max),
+        "current_balance": MT5.account_info().balance,
+        "daily_draw_down_max": daily_equity - daily,
+        "daily_draw_down_current": get_drowdown_daily(daily_equity, daily),
+        "max_loss_max": balanc - max_loss,
+        "max_loss_current": get_drowdown_max(balanc),
         "profit_target_max": profit,
         "profit_target_current": get_profit_target(balanc),
-        'profit': 0,
-        "lasted_for": 0
+        "profit": get_profit(balanc),
+        "lasted_for": get_first_trade(),
     }
-    requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+    response = requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                    headers={"Content-Type": "application/json"})
+    print("response - - - ", response)
+    print("Updated data:", response.json())
 
     while True:
         new = datetime.utcnow()
+
+        # ---------------------------------------- update daily information
         if new.day != old.day and new.hour == 0 and new.minute == 1:
             old = datetime.utcnow()
-            daily = mt5.account_info().equity - (mt5.account_info().equity * 0.01 * 5)
+            daily = MT5.account_info().equity - (MT5.account_info().equity * 0.01 * 5)
+            daily_equity = MT5.account_info().equity
             update_data = {
-                # "account_status": status,
-                # "total_profit_or_lose": get_profit_loss(balanc),
-                # "current_balance": mt5.account_info().balance,
-                "daily_draw_down_max": daily,
-                "daily_draw_down_current": get_drowdown(daily),
-                "max_loss_max": max,
-                "max_loss_current": get_drowdown(max),
-                "profit_target_max": profit,
-                "profit_target_current": get_profit_target(balanc),
-                # 'profit': get_profit(balanc),
-                "lasted_for": get_first_trade()
+                "daily_draw_down_max": daily_equity - daily,
+                "lasted_for": get_first_trade(),
             }
-            requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
-            print("New Daily loss=> ", daily)
-            message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+            message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
+            print("New Daily loss=> ", daily)
             print(requests.get(url).json())
 
-
-        if mt5.account_info().equity < daily:
+        # ---------------------------------------- Daily loss activate
+        if MT5.account_info().equity < daily:
             update_data = {
                 "account_status": "Daily loss",
                 "total_profit_or_lose": get_profit_loss(balanc),
-                "current_balance": mt5.account_info().balance,
-                "daily_draw_down_max": daily,
-                "daily_draw_down_current": get_drowdown(daily),
-                "max_loss_max": max,
-                "max_loss_current": max,
-                #"profit_target_max": profit,
-                #"profit_target_current": get_profit_target(balanc),
-                #'profit': 0,
-                #"lasted_for": 0
+                "current_balance": MT5.account_info().balance,
+                "daily_draw_down_max": daily_equity - daily,
+                "daily_draw_down_current": daily_equity - daily,
+                "max_loss_max": balanc - max_loss,
+                "max_loss_current": get_drowdown_max(balanc),
+                "profit_target_max": profit,
+                "profit_target_current": get_profit_target(balanc),
+                "profit": get_profit(balanc),
+                "lasted_for": get_first_trade(),
             }
-            requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
-            message = f"Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+            message = f"Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send("Account Violation - Max Daily Drawdown", HTML(login, "Max Daily Drawdown"))
+            Send("Account Violation - Max Daily Drawdown", HTML("Max Daily Drawdown"))
             print(requests.get(url).json())
             break
-        elif mt5.account_info().equity < max:
+
+        # ------------------------------------------ Max loss Activate
+        elif MT5.account_info().equity < max_loss:
             update_data = {
                 "account_status": "Max loss",
                 "total_profit_or_lose": get_profit_loss(balanc),
-                "current_balance": mt5.account_info().balance,
-                "daily_draw_down_max": daily,
-                "daily_draw_down_current": daily,
-                "max_loss_max": max,
-                "max_loss_current": get_drowdown(max),
-                # "profit_target_max": profit,
-                # "profit_target_current": get_profit_target(balanc),
-                # 'profit': 0,
-                # "lasted_for": 0
+                "current_balance": MT5.account_info().balance,
+                "daily_draw_down_max": daily_equity - daily,
+                "daily_draw_down_current": get_drowdown_daily(daily_equity, daily),
+                "max_loss_max": balanc - max_loss,
+                "max_loss_current": balanc - max_loss,
+                "profit_target_max": profit,
+                "profit_target_current": get_profit_target(balanc),
+                "profit": get_profit(balanc),
+                "lasted_for": get_first_trade(),
             }
-            requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
-            message = f"Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+            message = f"Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send("Account Violation - Max Drawdown", HTML(login, "Max Drawdown"))
+            Send("Account Violation - Max Drawdown", HTML("Max Drawdown"))
             print(requests.get(url).json())
             break
+
+        # ----------------------------------------- Weekly opening orders activate
         if new.weekday() == 6 and new.hour == 0 and new.minute == 1:
             if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
                 last_run_time = new
                 orders = 0
-                for sym in mt5.symbols_get():
-                    orders += len(mt5.positions_get(symbol=sym.name))
+                for sym in MT5.symbols_get():
+                    orders += len(MT5.positions_get(symbol=sym.name))
                 if orders > 0:
                     update_data = {
                         "account_status": "Weekly opening orders",
-                        #"total_profit_or_lose": get_profit_loss(balanc),
-                        #"current_balance": mt5.account_info().balance,
-                        #"daily_draw_down_max": daily,
-                        #"daily_draw_down_current": get_drowdown(daily),
-                        #"max_loss_max": max,
-                        #"max_loss_current": get_drowdown(max),
-                        # "profit_target_max": profit,
-                        # "profit_target_current": get_profit_target(balanc),
-                        # 'profit': 0,
-                        # "lasted_for": 0
                     }
-                    requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                    requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                                    headers={"Content-Type": "application/json"})
-                    message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+                    message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
                     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                    Send("Account Violation - Weekly opening orders", HTML(login, "Weekly opening orders"))
+                    Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
                     print(requests.get(url).json())
                     break
-        if mt5.positions_total() == 0:
+
+        # ----------------------------------------- 30 days of inactivity activate
+        if MT5.positions_total() == 0:
             if get_last_trade() + timedelta(days=29) < new:
                 update_data = {
                     "account_status": "30 days of inactivity",
-                    # "total_profit_or_lose": get_profit_loss(balanc),
-                    # "current_balance": mt5.account_info().balance,
-                    # "daily_draw_down_max": daily,
-                    # "daily_draw_down_current": get_drowdown(daily),
-                    # "max_loss_max": max,
-                    # "max_loss_current": get_drowdown(max),
-                    # "profit_target_max": profit,
-                    # "profit_target_current": get_profit_target(balanc),
-                    # 'profit': 0,
-                    # "lasted_for": 0
                 }
-                requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                                headers={"Content-Type": "application/json"})
-                message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
+                message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
                 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                Send("Account Violation - 30 days of inactivity", HTML(login, "30 days of inactivity"))
+                Send("Account Violation - 30 days of inactivity", HTML("30 days of inactivity"))
                 print(requests.get(url).json())
                 break
 
-
-        if update_time + timedelta(seconds=10) < datetime.utcnow():
-            update(balanc, "Activate", daily, max)
+        # ----------------------------------------  update Dashbord
+        if update_time + timedelta(seconds=60) < new:
+            update_data = {
+                "total_profit_or_lose": get_profit_loss(balanc),
+                "current_balance": MT5.account_info().balance,
+                "daily_draw_down_current": get_drowdown_daily(daily_equity, daily),
+                "max_loss_current": get_drowdown_max(balanc),
+                "profit_target_max": profit,
+                "profit_target_current": get_profit_target(balanc),
+                "profit": get_profit(balanc),
+            }
+            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                           headers={"Content-Type": "application/json"})
+            update_time = datetime.utcnow()
         time.sleep(0.1)
 else:
     print("NO Connected")
