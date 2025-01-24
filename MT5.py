@@ -144,15 +144,16 @@ def get_profit_loss(balancee):
         result = MT5.account_info().equity - balancee
     elif MT5.account_info().equity < balancee:
         result = -(balancee - MT5.account_info().equity)
-    return result
+    return round(result, 2)
 
 def get_drowdown_daily(daily_equity1, daily1):
     result = 0
     if MT5.account_info().equity < daily_equity1:
         result = MT5.account_info().equity - daily1
+        result = daily_equity1 - (daily1 + result)
         if result < 0:
             return
-    return result
+    return round(result, 2)
 
 def get_drowdown_max(balancee):
     result = 0
@@ -160,28 +161,34 @@ def get_drowdown_max(balancee):
         result = balancee - MT5.account_info().equity
         if result < 0:
             return
-    return result
+    return round(result, 2)
 
 def get_profit_target(balancee):
     result = 0
     if MT5.account_info().equity > balancee:
         result = MT5.account_info().equity - balancee
-    return result
+    return round(result, 2)
 
 def get_profit(balancee):
     result = 0
     if MT5.account_info().balance > balancee:
         result = MT5.account_info().balance - balancee
-    return result
+    return round(result, 2)
 
 def get_first_trade():
     try:
         a = MT5.history_deals_get(datetime.now() - timedelta(days=365), datetime.now() + timedelta(days=1))
         b = [x for x in a if x.profit != 0][1]
         d = MT5.history_deals_get(position=b.position_id)[0]
-        return datetime.fromtimestamp(d.time)
+        c = datetime.utcnow() - datetime.fromtimestamp(d.time)
+        if c.days > 0:
+            return c.days
+        else:
+            return 1
     except:
         return 0
+
+
 
 initialize = MT5.initialize()
 MT5.login(login=login, password=password, server=server)
@@ -198,11 +205,13 @@ if initialize:
     daily_equity = MT5.account_info().equity
     profit = MT5.account_info().balance * 0.01 * 8
     old = datetime.utcnow()
+    last_run_time = None
     update_time = datetime.utcnow()
     print("Daily loss=> ", daily)
     print("Max loss=> ", max_loss)
+
     update_data = {
-        "account_status": "Active", # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        "account_status": "Active", # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++awesgrdthfygjukhijkl;lsdtfyghjk
         "total_profit_or_lose": get_profit_loss(balanc),
         "current_balance": MT5.account_info().balance,
         "daily_draw_down_max": daily_equity - daily,
@@ -213,11 +222,15 @@ if initialize:
         "profit_target_current": get_profit_target(balanc),
         "profit": get_profit(balanc),
         "lasted_for": get_first_trade(),
+        "new_balance_history": {
+            "balance": MT5.account_info().balance,
+            "equity_balance": MT5.account_info().equity
+        }
+
     }
     response = requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                    headers={"Content-Type": "application/json"})
-    print("response - - - ", response)
-    print("Updated data:", response.json())
+
 
     while True:
         new = datetime.utcnow()
@@ -227,16 +240,26 @@ if initialize:
             old = datetime.utcnow()
             daily = MT5.account_info().equity - (MT5.account_info().equity * 0.01 * 5)
             daily_equity = MT5.account_info().equity
-            update_data = {
-                "daily_draw_down_max": daily_equity - daily,
-                "lasted_for": get_first_trade(),
-            }
+            if get_first_trade() == "0":
+                update_data = {
+                    "daily_draw_down_max": daily_equity - daily,
+                    "lasted_for": get_first_trade(),
+                }
+            else:
+                update_data = {
+                    "daily_draw_down_max": daily_equity - daily,
+                    "lasted_for": get_first_trade(),
+                    "new_balance_history": {
+                        "balance": MT5.account_info().balance,
+                        "equity_balance": MT5.account_info().equity
+                    }
+                }
             requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
             message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
             print("New Daily loss=> ", daily)
-            print(requests.get(url).json())
+            print(requests.get(url))
 
         # ---------------------------------------- Daily loss activate
         if MT5.account_info().equity < daily:
@@ -286,20 +309,22 @@ if initialize:
 
         # ----------------------------------------- Weekly opening orders activate
         if new.weekday() == 5 and funded:
-            orders = 0
-            for sym in MT5.symbols_get():
-                orders += len(MT5.positions_get(symbol=sym.name))
-            if orders > 0:
-                update_data = {
-                    "account_status": "Weekly opening orders",
-                }
-                requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                               headers={"Content-Type": "application/json"})
-                message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
-                print(requests.get(url).json())
-                break
+            if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
+                last_run_time = new
+                orders = 0
+                for sym in MT5.symbols_get():
+                    orders += len(MT5.positions_get(symbol=sym.name))
+                if orders > 0:
+                    update_data = {
+                        "account_status": "Weekly opening orders",
+                    }
+                    requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                                   headers={"Content-Type": "application/json"})
+                    message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                    Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
+                    print(requests.get(url).json())
+                    break
 
         # ----------------------------------------- 30 days of inactivity activate
         if MT5.positions_total() == 0:
