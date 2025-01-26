@@ -228,8 +228,8 @@ if initialize:
         }
 
     }
-    response = requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                   headers={"Content-Type": "application/json"})
+    print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                   headers={"Content-Type": "application/json"}))
 
 
     while True:
@@ -254,12 +254,23 @@ if initialize:
                         "equity_balance": MT5.account_info().equity
                     }
                 }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                           headers={"Content-Type": "application/json"})
-            message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-            url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
-            print("New Daily loss=> ", daily)
-            print(requests.get(url))
+            try:
+                print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                               headers={"Content-Type": "application/json"}))
+                message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
+                print("New Daily loss=> ", daily)
+                print("Telegram update", requests.get(url))
+            except Exception as er:
+                message = f"ERROR New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                print("New Daily loss=> ", daily)
+                print("Telegram update", requests.get(url))
+                print("\n")
+                print(er)
+
+
+
 
         # ---------------------------------------- Daily loss activate
         if MT5.account_info().equity < daily:
@@ -276,13 +287,21 @@ if initialize:
                 "profit": get_profit(balanc),
                 "lasted_for": get_first_trade(),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                           headers={"Content-Type": "application/json"})
-            message = f"Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send("Account Violation - Max Daily Drawdown", HTML("Max Daily Drawdown"))
-            print(requests.get(url).json())
-            break
+            try:
+                print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                           headers={"Content-Type": "application/json"}))
+                message = f"Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                Send("Account Violation - Max Daily Drawdown", HTML("Max Daily Drawdown"))
+                print("Telegram update", requests.get(url).json())
+                break
+            except Exception as er:
+                message = f"ERROR Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                print("Telegram update", requests.get(url).json())
+                print("\n")
+                print(er)
+                break
 
         # ------------------------------------------ Max loss Activate
         elif MT5.account_info().equity < max_loss:
@@ -299,13 +318,21 @@ if initialize:
                 "profit": get_profit(balanc),
                 "lasted_for": get_first_trade(),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                           headers={"Content-Type": "application/json"})
-            message = f"Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-            Send("Account Violation - Max Drawdown", HTML("Max Drawdown"))
-            print(requests.get(url).json())
-            break
+            try:
+                print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                           headers={"Content-Type": "application/json"}))
+                message = f"Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                Send("Account Violation - Max Drawdown", HTML("Max Drawdown"))
+                print(requests.get(url).json())
+                break
+            except Exception as er:
+                message = f"ERROR Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                print("Telegram update", requests.get(url).json())
+                print("\n")
+                print(er)
+                break
 
         # ----------------------------------------- Weekly opening orders activate
         if new.weekday() == 5 and funded:
@@ -318,13 +345,21 @@ if initialize:
                     update_data = {
                         "account_status": "Weekly opening orders",
                     }
-                    requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                                   headers={"Content-Type": "application/json"})
-                    message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-                    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                    Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
-                    print(requests.get(url).json())
-                    break
+                    try:
+                        print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                                   headers={"Content-Type": "application/json"}))
+                        message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                        Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
+                        print(requests.get(url).json())
+                        break
+                    except Exception as er:
+                        message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                        url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                        print("Telegram update", requests.get(url).json())
+                        print("\n")
+                        print(er)
+                        break
 
         # ----------------------------------------- 30 days of inactivity activate
         if MT5.positions_total() == 0:
@@ -332,13 +367,21 @@ if initialize:
                 update_data = {
                     "account_status": "30 days of inactivity",
                 }
-                requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
-                               headers={"Content-Type": "application/json"})
-                message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-                url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
-                Send("Account Violation - 30 days of inactivity", HTML("30 days of inactivity"))
-                print(requests.get(url).json())
-                break
+                try:
+                    print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                               headers={"Content-Type": "application/json"}))
+                    message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
+                    Send("Account Violation - 30 days of inactivity", HTML("30 days of inactivity"))
+                    print(requests.get(url).json())
+                    break
+                except Exception as er:
+                    message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                    url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                    print("Telegram update", requests.get(url).json())
+                    print("\n")
+                    print(er)
+                    break
 
         # ----------------------------------------  update Dashbord
         if update_time + timedelta(seconds=30) < new:
@@ -351,8 +394,17 @@ if initialize:
                 "profit_target_current": get_profit_target(balanc),
                 "profit": get_profit(balanc),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            try:
+                requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
+            except Exception as er:
+                message = f"ERROR SECOND!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
+                url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
+                print("Telegram update", requests.get(url).json())
+                print("\n")
+                print(er)
+                time.sleep(600)
+
             update_time = datetime.utcnow()
         time.sleep(0.1)
 else:
