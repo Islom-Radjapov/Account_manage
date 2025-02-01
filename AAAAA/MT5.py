@@ -12,10 +12,10 @@ from msal import ConfidentialClientApplication
 import requests
 
 server = "BlueWhaleMarkets-Server"
-login = 579467
-password = "WzZ-8cBz"
-TO_EMAIL = "sardorjon.nasimov@mail.ru"
-challenge_id = 9
+login = 579984
+password = "!wGp0gSk"
+TO_EMAIL = "xxayotbek445@gmail.com"
+challenge_id = 13
 funded = True
 
 def HTML(los):
@@ -205,7 +205,6 @@ if initialize:
     daily_equity = MT5.account_info().equity
     profit = MT5.account_info().balance * 0.01 * 8
     old = datetime.utcnow()
-    last_run_time = None
     update_time = datetime.utcnow()
     print("Daily loss=> ", daily)
     print("Max loss=> ", max_loss)
@@ -344,9 +343,7 @@ if initialize:
                 break
 
         # ----------------------------------------- Weekly opening orders activate
-        if new.weekday() == 5 and funded:
-            if not last_run_time or (new - last_run_time) >= timedelta(weeks=1):
-                last_run_time = new
+        if (new.weekday() == 5 or new.weekday() == 6) and funded:
                 orders = 0
                 for sym in MT5.symbols_get():
                     orders += len(MT5.positions_get(symbol=sym.name))
