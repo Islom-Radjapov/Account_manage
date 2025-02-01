@@ -230,7 +230,7 @@ if initialize:
     }
     print("API update", requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
                    headers={"Content-Type": "application/json"}))
-
+    print(datetime.utcnow())
 
     while True:
         new = datetime.utcnow()
@@ -261,6 +261,7 @@ if initialize:
                 url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
                 print("New Daily loss=> ", daily)
                 print("Telegram update", requests.get(url))
+                print(datetime.utcnow())
             except Exception as er:
                 message = f"ERROR New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
                 url = f"https://api.telegram.org/bot8070314672:AAEzro1XMEfOFSgXOfs9g2Je3cvfoizv-Lg/sendMessage?chat_id={chat_id}&text={message}"
@@ -268,6 +269,8 @@ if initialize:
                 print("Telegram update", requests.get(url))
                 print("\n")
                 print(er)
+                print("\n")
+                print(datetime.utcnow())
 
 
 
@@ -294,6 +297,7 @@ if initialize:
                 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
                 Send("Account Violation - Max Daily Drawdown", HTML("Max Daily Drawdown"))
                 print("Telegram update", requests.get(url).json())
+                print(datetime.utcnow())
                 break
             except Exception as er:
                 message = f"ERROR Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
@@ -301,6 +305,8 @@ if initialize:
                 print("Telegram update", requests.get(url).json())
                 print("\n")
                 print(er)
+                print("\n")
+                print(datetime.utcnow())
                 break
 
         # ------------------------------------------ Max loss Activate
@@ -325,6 +331,7 @@ if initialize:
                 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
                 Send("Account Violation - Max Drawdown", HTML("Max Drawdown"))
                 print(requests.get(url).json())
+                print(datetime.utcnow())
                 break
             except Exception as er:
                 message = f"ERROR Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
@@ -332,6 +339,8 @@ if initialize:
                 print("Telegram update", requests.get(url).json())
                 print("\n")
                 print(er)
+                print("\n")
+                print(datetime.utcnow())
                 break
 
         # ----------------------------------------- Weekly opening orders activate
@@ -352,6 +361,7 @@ if initialize:
                         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
                         Send("Account Violation - Weekly opening orders", HTML("Weekly opening orders"))
                         print(requests.get(url).json())
+                        print(datetime.utcnow())
                         break
                     except Exception as er:
                         message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
@@ -359,6 +369,8 @@ if initialize:
                         print("Telegram update", requests.get(url).json())
                         print("\n")
                         print(er)
+                        print("\n")
+                        print(datetime.utcnow())
                         break
 
         # ----------------------------------------- 30 days of inactivity activate
@@ -374,6 +386,7 @@ if initialize:
                     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
                     Send("Account Violation - 30 days of inactivity", HTML("30 days of inactivity"))
                     print(requests.get(url).json())
+                    print(datetime.utcnow())
                     break
                 except Exception as er:
                     message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
@@ -381,6 +394,8 @@ if initialize:
                     print("Telegram update", requests.get(url).json())
                     print("\n")
                     print(er)
+                    print("\n")
+                    print(datetime.utcnow())
                     break
 
         # ----------------------------------------  update Dashbord
@@ -403,6 +418,8 @@ if initialize:
                 print("Telegram update", requests.get(url).json())
                 print("\n")
                 print(er)
+                print("\n")
+                print(datetime.utcnow())
                 time.sleep(30)
 
             update_time = datetime.utcnow()
