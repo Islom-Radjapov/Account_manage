@@ -1,6 +1,6 @@
 // ----------------------------------------------------  TELEGRAM -----------------------------------------------------------------------
 double chat_id[3] = {529408795, 561789930};
-const string Token = "7681078661:AAFa53g5UjVga17KFHI1vJV0GxugrLeM08M";
+const string Token = "***";
 const string URL = "https://api.telegram.org";
 
 bool SendMessage(double id, string text) {
