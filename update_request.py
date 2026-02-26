@@ -13,7 +13,7 @@ def update(challenge_id):
         "start_date_trade": datetime.now().strftime("%Y-%m-%d"),
         "lasted_for": datetime.now().strftime("%Y-%m-%d"),
     }
-    requests.patch(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data, headers={"Content-Type": "application/json"})
+    requests.patch(f"https://*.com/api/challenges/{challenge_id}/", json=update_data, headers={"Content-Type": "application/json"})
 
 
 

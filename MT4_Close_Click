@@ -4,7 +4,7 @@ bool SetCursorPos(int x, int y);
 #import
 
 // ----------------------------------------------------  TELEGRAM -----------------------------------------------------------------------
-double chat_id[2] = {529408795, 561789930};
+double chat_id[2] = {*, *};
 const string Token = "***";
 const string URL = "https://api.telegram.org";
 

@@ -11,16 +11,16 @@ from datetime import timedelta
 from msal import ConfidentialClientApplication
 import requests
 
-server = "BlueWhaleMarkets-Server"
-login = 573864
-password = 'X@7vJyRk'
-TO_EMAIL = "akmalturaev891@gmail.com"
+server = "*"
+login = 12345
+password = '*'
+TO_EMAIL = "*"
 
 def HTML(login, los):
     return f"""
 <!DOCTYPE html>
 <head>
-    <title>Welcome to Dreams Funded</title>
+    <title>Welcome to *</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
     <div style="text-align: center; margin-top: 20px;">
@@ -38,7 +38,7 @@ def HTML(login, los):
     <div style="text-align: center; margin-top: 20px;">
         <p>
             Best Regards <br/>
-            <b>The Dreams Funded Team</b>
+            <b>The * Team</b>
         </p>
     </div>
 </body>
@@ -47,8 +47,8 @@ def HTML(login, los):
 
 
 
-TOKEN = "7681078661:AAFa53g5UjVga17KFHI1vJV0GxugrLeM08M"
-chat_id = "529408795"
+TOKEN = "***"
+chat_id = "*"
 
 def get_access_token(client_id, client_secret, tenant_id):
     """
@@ -108,10 +108,10 @@ def send_email(access_token, sender_email, recipient_email, subject, html_conten
         return False
 
 # Replace these with your Azure AD app details and email settings
-CLIENT_ID = "efa87325-5a82-48be-b463-3f50ba0ed6ec"
-CLIENT_SECRET = "2dg8Q~FnSeiC.dToAWXedvVEc2go5C60eWUMCdhK"
-TENANT_ID = "619ef93b-584c-4cb7-b9c9-1946e5da30d2"
-SENDER_EMAIL = "support@dreams-funded.com"
+CLIENT_ID = "***"
+CLIENT_SECRET = "***"
+TENANT_ID = "***"
+SENDER_EMAIL = "***"
 
 def Send(subject, html):
     while True:
@@ -149,7 +149,7 @@ if initialize:
             daily = mt5.account_info().equity - (mt5.account_info().equity * 0.01 * 5)
             print("New Daily loss=> ", daily)
             message = f"New Daily loss=> {daily}\nTime {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nName {mt5.account_info().name}\nLogin {mt5.account_info().login}"
-            url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
+            url = f"https://api.telegram.org/bot*/sendMessage?chat_id={chat_id}&text={message}"
             print(requests.get(url).json())
 
 

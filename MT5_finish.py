@@ -1,10 +1,10 @@
 import MetaTrader5 as mt5
 from datetime import datetime, timedelta
 import pandas as pd
-login = 572534
-password = "-cXiW7Rm"
-server = 'BlueWhaleMarkets-Server'
-TO_EMAIL = "islom.radjapov.1997@mail.ru"
+login = 12345
+password = "*"
+server = '*'
+TO_EMAIL = "*"
 
 def get_profit_loss():
     result = 0

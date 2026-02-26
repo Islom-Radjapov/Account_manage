@@ -11,17 +11,17 @@ from datetime import datetime, timedelta
 from msal import ConfidentialClientApplication
 import requests
 
-login = 577841
-password = "G-KqY5Bg"
-server = 'BlueWhaleMarkets-Server'
-TO_EMAIL = "islom.radjapov.1997@mail.ru"
-challenge_id = 7
+login = 12345
+password = "*"
+server = '*'
+TO_EMAIL = "*""
+challenge_id = 1
 
 def HTML(los):
     return f"""
 <!DOCTYPE html>
 <head>
-    <title>Welcome to Dreams Funded</title>
+    <title>Welcome to *</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
     <div style="text-align: center; margin-top: 20px;">
@@ -39,7 +39,7 @@ def HTML(los):
     <div style="text-align: center; margin-top: 20px;">
         <p>
             Best Regards <br/>
-            <b>The Dreams Funded Team</b>
+            <b>The * Team</b>
         </p>
     </div>
 </body>
@@ -48,8 +48,8 @@ def HTML(los):
 
 
 
-TOKEN = "7681078661:AAFa53g5UjVga17KFHI1vJV0GxugrLeM08M"
-chat_id = "529408795"
+TOKEN = "***"
+chat_id = "*"
 
 def get_access_token(client_id, client_secret, tenant_id):
     """
@@ -109,10 +109,10 @@ def send_email(access_token, sender_email, recipient_email, subject, html_conten
         return False
 
 # Replace these with your Azure AD app details and email settings
-CLIENT_ID = "efa87325-5a82-48be-b463-3f50ba0ed6ec"
-CLIENT_SECRET = "2dg8Q~FnSeiC.dToAWXedvVEc2go5C60eWUMCdhK"
-TENANT_ID = "619ef93b-584c-4cb7-b9c9-1946e5da30d2"
-SENDER_EMAIL = "support@dreams-funded.com"
+CLIENT_ID = "*"
+CLIENT_SECRET = "*"
+TENANT_ID = "*"
+SENDER_EMAIL = "*"
 
 def Send(subject, html):
     while True:
@@ -227,7 +227,7 @@ if initialize:
         }
 
     }
-    response = requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+    response = requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                    headers={"Content-Type": "application/json"})
 
 
@@ -253,10 +253,10 @@ if initialize:
                         "equity_balance": MT5.account_info().equity
                     }
                 }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
             message = f"New Daily loss=> {daily}\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
-            url = f"https://api.telegram.org/bot7587623547:AAE_AIFaFF2UF3-Et-HRs09nJgZgHYeaSUc/sendMessage?chat_id={chat_id}&text={message}"
+            url = f"https://api.telegram.org/bot*/sendMessage?chat_id={chat_id}&text={message}"
             print("New Daily loss=> ", daily)
             print(requests.get(url))
 
@@ -275,7 +275,7 @@ if initialize:
                 "profit": get_profit(balanc),
                 "lasted_for": get_first_trade(),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
             message = f"Done Daily loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
@@ -298,7 +298,7 @@ if initialize:
                 "profit": get_profit(balanc),
                 "lasted_for": get_first_trade(),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
             message = f"Done Max loss!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
@@ -317,7 +317,7 @@ if initialize:
                     update_data = {
                         "account_status": "Weekly opening orders",
                     }
-                    requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                    requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                                    headers={"Content-Type": "application/json"})
                     message = f"Done Weekly opening orders!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
                     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
@@ -331,7 +331,7 @@ if initialize:
                 update_data = {
                     "account_status": "30 days of inactivity",
                 }
-                requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+                requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                                headers={"Content-Type": "application/json"})
                 message = f"Done 30 days of inactivity!\nTime {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}\nName {MT5.account_info().name}\nLogin {MT5.account_info().login}"
                 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
@@ -350,7 +350,7 @@ if initialize:
                 "profit_target_current": get_profit_target(balanc),
                 "profit": get_profit(balanc),
             }
-            requests.put(f"https://dreams-funded.com/api/challenges/{challenge_id}/", json=update_data,
+            requests.put(f"https://*.com/api/challenges/{challenge_id}/", json=update_data,
                            headers={"Content-Type": "application/json"})
             update_time = datetime.utcnow()
         time.sleep(0.1)

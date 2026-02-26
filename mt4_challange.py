@@ -113,9 +113,9 @@ def generate_password(length=8):
     return ''.join(password)
 
 
-email = "movaw70467@bulatox.com"
-pasword = "Asd_1234"
-old_password = "bLaiC3_Y"
+email = "*"
+pasword = "*"
+old_password = "*"
 new_password = generate_password(13)
 
 

@@ -1,8 +1,8 @@
 import MetaTrader5 as mt5
 from _datetime import datetime
-login = 576500
-password = "HzS-Dz2o"
-server = 'BlueWhaleMarkets-Server'
+login = 123456
+password = "*"
+server = '*'
 
 initialize = mt5.initialize()
 mt5.login(login=login, password=password, server=server)
